@@ -7,13 +7,18 @@ const longoBt = document.querySelector('.app__card-button--longo')
 const comecarBt = document.querySelector('.app__card-primary-button')
 const botoes = document.querySelectorAll('.app__card-button')
 const musicaFocoInput = document.querySelector('#alternar-musica')
-const musica = new Audio('/sons/luna-rise-part-one.mp3') 
+const musica = new Audio('/sons/luna-rise-part-one.mp3')
 musica.loop = true
+const somPlay = new Audio('/sons/play.wav')
+const somPause = new Audio('/sons/pause.mp3')
+const somTempoFinalizado = new Audio('/sons/beep.mp3')
 const timer = document.querySelector('#timer')
 const banner = document.querySelector('.app__image')
 const titulo = document.querySelector('.app__title')
 const startPauseBt = document.querySelector('#start-pause')
-//temporizadores
+const iniciarOuPausarBt = startPauseBt.querySelector('span')
+const iniciarOuPausarIcone = startPauseBt.querySelector('img')
+console.log(iniciarOuPausarIcone)
 const duracaoFoco = 1500
 const duracaoDescansoCurto = 300
 const duracaoDescansoLongo = 900
@@ -72,9 +77,10 @@ function alterarContexto(contexto) {
 }
 
 const contagemRegressiva = () => {
-    if(tempoDecorridoEmSegundos <= 0){
-        zerar()
+    if (tempoDecorridoEmSegundos <= 0) {
+        // somTempoFinalizado.play()
         alert("Tempo finalizado")
+        zerar()
         return
     }
     tempoDecorridoEmSegundos -= 1
@@ -83,14 +89,20 @@ const contagemRegressiva = () => {
 startPauseBt.addEventListener('click', iniciarOuPausar)
 
 function iniciarOuPausar() {
-    if(intervaloId){
+    if (intervaloId) {
+        somPause.play()
         zerar()
         return
     }
+    somPlay.play()
     intervaloId = setInterval(contagemRegressiva, 1000)
+    iniciarOuPausarIcone.setAttribute('src', '/imagens/pause.png' )
+    iniciarOuPausarBt.textContent = "Pausar"
 }
 
 function zerar() {
     clearInterval(intervaloId)
+    iniciarOuPausarBt.textContent = "Começar"
+    iniciarOuPausarIcone.setAttribute('src', '/imagens/play_arrow.png' )
     intervaloId = null
 }
